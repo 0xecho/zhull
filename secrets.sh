@@ -1,0 +1,2 @@
+##https://github.com/Punt0/SecretFinder (will add more Regex )
+./inputter.sh $1 initial_subdomains | httpx -silent | xargs -I@ sh -c " gospider -s @  --depth 3 --no-redirect -t 100 -c 3 " | awk '!seen[$0]++' | grep -Eo '(http|https)://[^/"].*.js+' | cut -d "?" -f1 | httpx -silent -status-code -mc 200 | cut -d [ -f1 | tr -d ' ' | xargs -I% sh -c " python3 /root/SecretFinder/SecretFinder.py -i % -o cli " ./outputter.sh $1 "/initial_Secrets"
